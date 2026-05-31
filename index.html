@@ -1,722 +1,371 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Network - Protect Earth</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>子船日报</title>
+<style>
+    :root {
+        --ink: #101010;
+        --muted: #666;
+        --paper: #fffdf9;
+        --rule: rgba(0,0,0,.12);
+        --accent: #6f1010;
+    }
+    html, body {
+        margin: 0;
+        padding: 0;
+        background:
+            radial-gradient(circle at top, rgba(255,255,255,.92), rgba(255,255,255,0) 42%),
+            linear-gradient(180deg, #ffffff 0%, #f7f2e9 100%);
+        color: var(--ink);
+    }
+    body {
+        font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", "Times New Roman", serif;
+        line-height: 1.9;
+        text-rendering: geometricPrecision;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .sheet {
+        max-width: 1180px;
+        margin: 16px auto 24px;
+        background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+        border: 1px solid rgba(0,0,0,.10);
+        box-shadow: 0 24px 70px rgba(0,0,0,.09);
+        overflow: hidden;
+    }
+    .masthead {
+        text-align: center;
+        padding: 26px 18px 14px;
+        border-bottom: 2px solid var(--rule);
+    }
+    .title {
+        margin: 0;
+        font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        font-size: clamp(54px, 7vw, 102px);
+        font-weight: 800;
+        letter-spacing: 14px;
+        line-height: 1;
+    }
+    .strap {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+    .meta {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px 22px;
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: .5px;
+    }
+    .age-wrap {
+        width: min(980px, calc(100% - 24px));
+        margin: 16px auto 0;
+        padding: 10px 0 4px;
+        border-top: 1px solid var(--rule);
+    }
+    .age {
+        font-size: 15px;
+        color: #121212;
+        text-align: center;
+        letter-spacing: .3px;
+        font-family: "Times New Roman", serif;
+    }
 
-        :root {
-            --primary: #2e7d32;
-            --secondary: #4caf50;
-            --accent: #8bc34a;
-            --light: #e8f5e9;
-            --dark: #1b5e20;
-            --text: #333333;
-            --white: #ffffff;
-        }
+    .content {
+        padding: 18px 18px 26px;
+    }
+    .lead {
+        display: grid;
+        grid-template-columns: 1.22fr .78fr;
+        gap: 18px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--rule);
+        margin-bottom: 18px;
+    }
+    .kicker {
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 6px;
+    }
+    .headline {
+        margin: 0 0 10px;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-size: clamp(30px, 4vw, 58px);
+        line-height: 1.08;
+        font-weight: 800;
+    }
+    .deck {
+        margin: 0 0 14px;
+        font-size: 18px;
+        line-height: 1.95;
+        color: #222;
+    }
+    .byline {
+        font-size: 13px;
+        color: var(--muted);
+        letter-spacing: .4px;
+    }
+    .visual {
+        display: grid;
+        gap: 12px;
+    }
+    figure {
+        margin: 0;
+    }
+    .photo-card {
+        background: rgba(255,255,255,.96);
+        border: 1px solid rgba(0,0,0,.10);
+        box-shadow: 0 8px 26px rgba(0,0,0,.08);
+        padding: 10px;
+    }
+    .photo-card img,
+    .inline-photo img {
+        width: 100%;
+        display: block;
+        height: auto;
+    }
+    figcaption {
+        margin-top: 8px;
+        color: #555;
+        font-size: 12px;
+        line-height: 1.55;
+        letter-spacing: .2px;
+    }
+    .article {
+        column-count: 2;
+        column-gap: 34px;
+        column-rule: 1px solid rgba(0,0,0,.08);
+        font-size: 18px;
+        line-height: 2.02;
+        text-align: justify;
+    }
+    .article p {
+        margin: 0 0 18px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .article p.dropcap::first-letter {
+        float: left;
+        font-size: 4.6em;
+        line-height: .85;
+        padding: 6px 10px 0 0;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-weight: 800;
+        color: var(--accent);
+    }
+    .inline-photo {
+        break-inside: avoid;
+        margin: 8px 0 18px;
+        padding: 8px;
+        border: 1px solid rgba(0,0,0,.10);
+        background: rgba(255,255,255,.95);
+        box-shadow: 0 6px 22px rgba(0,0,0,.08);
+    }
+    .quote {
+        margin: 22px 0 0;
+        padding: 16px 18px;
+        border-left: 5px solid var(--accent);
+        background: rgba(111,16,16,.04);
+        font-size: 20px;
+        line-height: 1.75;
+        font-weight: 700;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .footer {
+        padding: 14px 18px 22px;
+        border-top: 1px solid var(--rule);
+        color: var(--muted);
+        font-size: 13px;
+        letter-spacing: .5px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin: 0 0 18px;
+    }
+    .panel {
+        border: 1px solid rgba(0,0,0,.08);
+        background: rgba(255,255,255,.92);
+        padding: 14px 16px;
+        box-shadow: 0 6px 18px rgba(0,0,0,.05);
+    }
+    .panel h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .panel p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.85;
+        color: #2b2b2b;
+    }
 
-        body {
-            background-color: var(--light);
-            color: var(--text);
-            line-height: 1.6;
+    @media (max-width: 960px) {
+        .lead {
+            grid-template-columns: 1fr;
         }
-
-        header {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: var(--white);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        .article {
+            column-count: 1;
         }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
+    }
+    @media (max-width: 720px) {
+        .sheet {
+            margin: 8px;
         }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .content {
+            padding: 14px 12px 20px;
         }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.8rem;
-            font-weight: 700;
+        .title {
+            letter-spacing: 8px;
         }
-
-        .logo i {
-            font-size: 2rem;
+        .deck, .article {
+            font-size: 16px;
         }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin-left: 2rem;
-        }
-
-        nav ul li a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-
-        nav ul li a:hover {
-            color: var(--accent);
-        }
-
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        nav ul li a:hover::after {
-            width: 100%;
-        }
-
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 80vh;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: var(--white);
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: var(--accent);
-            color: var(--white);
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn:hover {
-            background-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        section {
-            padding: 5rem 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background-color: var(--accent);
-            border-radius: 2px;
-        }
-
-        .section-title p {
-            color: var(--text);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .about-img {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .about-img img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .about-img:hover img {
-            transform: scale(1.05);
-        }
-
-        .about-text h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 2rem 1rem;
-            background-color: var(--white);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-10px);
-        }
-
-        .stat-item i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .stat-item h3 {
-            font-size: 2.5rem;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-item p {
-            color: var(--text);
-        }
-
-        .initiatives {
-            background-color: var(--white);
-        }
-
-        .initiatives-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .initiative-card {
-            background-color: var(--light);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .initiative-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .initiative-img {
-            height: 200px;
-            overflow: hidden;
-        }
-
-        .initiative-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .initiative-card:hover .initiative-img img {
-            transform: scale(1.1);
-        }
-
-        .initiative-content {
-            padding: 1.5rem;
-        }
-
-        .initiative-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-
-        .initiative-content p {
-            margin-bottom: 1.5rem;
-        }
-
-        .cta {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: var(--white);
-            text-align: center;
-            padding: 5rem 0;
-        }
-
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .cta p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta .btn {
-            background-color: var(--white);
-            color: var(--primary);
-        }
-
-        .cta .btn:hover {
-            background-color: var(--accent);
-            color: var(--white);
-        }
-
-        footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 3rem 0 1rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background-color: var(--accent);
-        }
-
-        .footer-column p {
-            margin-bottom: 1rem;
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-links li a {
-            color: var(--light);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-links li a:hover {
-            color: var(--accent);
-            padding-left: 5px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-links a {
-            display: inline-flex;
-            align-items: center;
+        .footer {
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: var(--white);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            background-color: var(--accent);
-            transform: translateY(-5px);
-        }
-
-        .copyright {
             text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .mobile-menu {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
+        .split {
+            grid-template-columns: 1fr;
         }
-
-        @media (max-width: 992px) {
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .initiatives-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            nav ul {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: var(--primary);
-                flex-direction: column;
-                padding: 1rem 0;
-                text-align: center;
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-            }
-            
-            nav ul.active {
-                display: flex;
-            }
-            
-            nav ul li {
-                margin: 0;
-                padding: 0.8rem 0;
-            }
-            
-            .mobile-menu {
-                display: block;
-            }
-            
-            .initiatives-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Animation for stats counter */
-        .counter {
-            transition: all 0.5s ease;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container nav-container">
-            <div class="logo">
-                <i class="fas fa-seedling"></i>
-                <span>Green Network</span>
-            </div>
-            <nav>
-                <div class="mobile-menu">
-                    <i class="fas fa-bars"></i>
-                </div>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#initiatives">Initiatives</a></li>
-                    <li><a href="#get-involved">Get Involved</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
+<main class="sheet">
+    <header class="masthead">
+        <h1 class="title">子船日报</h1>
+        <div class="strap">THE ZICHUAN DAILY · 特别人物专刊</div>
+        <div class="meta">
+            <span>发布日期：2026年5月30日</span>
+            <span>发报人：KUN</span>
+            <span>版次：001</span>
         </div>
+        <div class="age" id="age">小白脸已经：加载中…</div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container hero-content">
-            <h1>Protect Our Planet, Preserve Our Future</h1>
-            <p>Join the global movement to create a sustainable world through conservation, education, and community action.</p>
-            <a href="#get-involved" class="btn">Join Our Network</a>
-        </div>
+    <section class="content">
+        <section class="lead">
+            <div>
+                <div class="kicker">HEADLINE / 头版头条</div>
+                <h2 class="headline">从病床到课堂：王子航的王者归来</h2>
+                <p class="deck">九年级关键阶段，一次体育课上的足球绕杆训练意外，让王子航经历了骨折、骨裂与短暂休学，也让一段原本普通的校园日常，变成了值得被郑重记录的成长篇章。</p>
+                <div class="byline">专题撰稿：KUN｜版面设计：子船日报编辑部</div>
+            </div>
+            <div class="visual">
+                <figure class="photo-card">
+                    <img src="assets/img-1.jpg" alt="王子航住院复习场景">
+                    <figcaption>图① · 王子航在医院病房内坚持复习功课，学习进度未曾中断。</figcaption>
+                </figure>
+                <figure class="photo-card">
+                    <img src="assets/img-2.jpg" alt="王子航重返课堂场景">
+                    <figcaption>图② · 王子航在伤愈后重返课堂，展现出稳定而坚定的学习状态。</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <article class="article">
+            <p class="dropcap">那一天的体育课原本和往常没有太大不同。阳光落在操场上，风从跑道边缓缓吹来，足球绕杆训练按照既定节奏推进，周围的一切都显得再寻常不过。也正是在这样平静的背景里，王子航在动作转换时不慎摔倒，腿部受伤的瞬间打断了原本流畅的节奏。对于一个九年级学生来说，这样的意外不仅意味着身体上的不便，更意味着学习、作息和生活秩序都要迅速调整。可是，真正值得被记录下来的，并不只是那次跌倒，而是他在跌倒之后，如何把自己重新组织起来，如何把“暂停”变成“蓄力”，如何在看似被迫停下的时候，依然没有放下学习这件事。</p>
+
+            <p>受伤之后，住院成了他生活中的一段特殊插曲。原本应该在教室里度过的时间，转移到了病房里；原本应该在课桌前完成的任务，被他带到了床边、桌面和窗台旁边。人们常常会以为，住院意味着停顿，意味着课程的中断，意味着一切都要暂时放下，但王子航的选择恰恰相反。他没有让自己沉在“受伤”这件事里，而是尽可能把每一天都安排得井井有条：白天配合治疗，空余时间补课；白天整理笔记，晚上刷卷子；不会的题一遍遍重做，遗漏的知识点一条条补全。这样的过程没有轰轰烈烈的宣言，却最能看出一个人的耐心、定力和自律。</p>
+
+            <div class="inline-photo">
+                <img src="assets/img-3.jpg" alt="王子航收藏旧照一">
+                <figcaption>图③ · 王子航在日常生活中的一张旧照，呈现出自然、从容的状态。</figcaption>
+            </div>
+
+            <p>住院期间最让人印象深刻的，并不是他因伤病而经历了什么，而是他面对这些变化时，始终保持着一种很安静的专注。每天刷题、每天订正、每天总结错题，成了他几乎不变的节奏。病房里的时间很长，长到足以让人感到疲倦，也长到足以把一个人的意志磨得很细。可王子航没有把这些时间浪费掉，他反而用它们去换取一种更踏实的进步。他会把不会的题圈出来，把知识点重写一遍，把做错的地方再补一遍，有时甚至会在同一道题上停留很久，只为了弄明白自己到底是在哪一步出了问题。对很多人来说，这样的复习方式也许不够轻松，但它很扎实，而扎实，恰恰是最难得的一种品质。</p>
+
+            <p>更重要的是，他并没有因为受伤而在心理上放弃自己。一个人在遭遇意外之后，最容易出现的不是身体上的疼痛，而是节奏被打乱后的焦虑。课程会不会落下，考试会不会受影响，重新回到学校时还能不能跟得上，这些问题都可能在安静的夜里反复出现。可王子航没有让这些问题压倒自己。他知道，越是这个时候，越要稳住。于是，原本短暂的休学，反而被他变成了一段高度自律的学习阶段；原本带有遗憾的住院期，反而成了锤炼意志的过程。他用一张张试卷，把不确定变成可控；用一次次复盘，把焦虑变成秩序；用一页页笔记，把停顿重新接回了前进的轨道。</p>
+
+            <p>这份坚持并不是外人眼中轻描淡写的“努力一下”，而是真正落实在细节里的认真。他没有因为环境变化而降低标准，也没有因为身体不便而随意应付。相反，在那些安静的时刻里，他把自己训练得更加专注。他清楚地知道，伤病迟早会好转，时间也不会永远停在这一页，而真正能决定未来的，是自己在这段时间里有没有守住学习的节奏，有没有保住那份不轻易松手的劲头。也正因如此，当别人回头看这段经历时，看到的就不只是一个“受伤的学生”，而是一个在低谷中依然能维持高标准的人。</p>
+
+            <div class="inline-photo">
+                <img src="assets/img-4.jpg" alt="王子航收藏旧照二">
+                <figcaption>图④ · 王子航另一张生活照，体现出青春阶段的活力与自信。</figcaption>
+            </div>
+
+            <p>终于，在经历了一个月左右的恢复后，王子航重新回到了教室。那一刻并没有太多夸张的场面，却让熟悉他的人都感到一种很自然的振奋。教室还是那间教室，桌椅还是那些桌椅，黑板上的字也依旧密密麻麻，但那个再次站回原位的少年，已经和离开时不太一样了。他的回归不是简单的“回到学校”，而是经历过中断之后，把自己重新接回集体、接回学习、接回生活的一次正式登场。对他来说，这一步并不轻松；但也正因为不轻松，这一步才显得格外有分量。</p>
+
+            <p>而真正让这段故事完整闭环的，是随后公布的成绩。班级第10名，这个数字并不只是一个名次，它更像是一个答案，一个证明，证明他在受伤、住院、休学、恢复的过程中，没有把学习真正放下。很多时候，大家只看到最后的结果，却很少看到结果背后的路径。王子航的这张成绩单，背后是无数个病房里的夜晚，是一摞摞被翻过的试卷，是无数次重写的错题，也是一个少年在困难面前没有退缩的身影。它说明，真正有效的努力并不总是发生在顺风顺水的时候，反而常常出现在最不方便、最容易分心、最容易放弃的阶段。</p>
+
+            <p>如果把这段经历放在更长的时间线上看，它其实带给人的启发远不止“取得了第10名”这么简单。它告诉我们，一个人真正的强大，不是从不受伤，而是在受伤之后依然愿意认真生活；不是从不遇到困难，而是在困难面前仍然保持秩序；不是永远都跑在最前面，而是即使被迫落后，也依旧会一点点追上来。王子航正是这样的人。他没有因为一次摔倒就否定自己，也没有因为短暂离开校园就放松要求。相反，他把每一天都看成一次重新校准的机会，把每一次复习都看成一次修复节奏的机会，把每一次刷题都看成一次朝着目标前进的机会。</p>
+
+            <div class="inline-photo">
+                <img src="assets/img-2.jpg" alt="王子航再次回到课堂">
+                <figcaption>图⑤ · 王子航再次回到课堂后，学习状态逐步恢复如常。</figcaption>
+            </div>
+
+            <p>他的身高 178cm，站在人群里本就很容易被注意到；而同学们给他的外号“小白脸”，也早已成为班级里一种带着熟悉感的称呼。可这份称呼之所以被大家记住，并不仅仅因为外貌，更因为他整个人展现出来的气质：干净、专注、稳妥、认真。那是一种很难被一句话概括的感觉，像是从容，也像是自信；像是少年感，也像是一种已经开始成形的成熟。正因如此，当人们谈论王子航时，谈论的从来不只是外表，而是他在学习、恢复和归来过程里展现出的那股“能把事情做成”的劲头。</p>
+
+            <p>这份劲头，是在住院期间一点点积攒出来的。每天都做题，意味着每天都要面对不会的内容；每天都复习，意味着每天都要和自己过去的薄弱点正面交锋。很多人怕的不是辛苦，而是看见自己的不足；很多人放弃的也不是因为太难，而是因为不愿意反复承认自己还没做好。可王子航并没有回避这些现实。他选择的不是绕开问题，而是直接解决问题。这样的选择看起来平常，实际上却非常有力量。因为所有真正的进步，往往都来自这样的积累：你今天比昨天多理解了一点，今天比昨天少错了一道，今天比昨天更稳了一点，久而久之，这些一点点就会变成很大的不同。</p>
+
+            <p>返校之后，他也并没有把自己当成一个“刚刚恢复”的特殊个体，而是很快重新融入了课堂节奏。该听课时认真听课，该完成作业时认真完成作业，该参与讨论时积极参与讨论。这样的状态让人感觉很踏实，因为它说明他不仅恢复了身体，也恢复了学习的秩序。一个人最值得称赞的地方，有时并不是某一次惊艳的表现，而是能在经历中保持稳定，在恢复后迅速回到正轨，在每一个普通的日子里继续坚持该坚持的事情。王子航恰恰做到了这一点。</p>
+
+            <p>也因此，这篇《子船日报》的头条并不只是为了记录一段受伤复学的经历，更是为了记录一种值得被看见的成长方式。它告诉大家，青春不只是在顺利的时候闪闪发亮，也会在跌倒之后依然努力向前；优秀不只是考场上短暂的高分，也是在不容易的阶段里仍然坚持完成每天该做的事情；所谓王者归来，也不是夸张的修辞，而是经历过低谷之后，真的把自己带回更好的位置。</p>
+
+            <p>王子航的故事，之所以适合占据头版，是因为它本身就带着一份完整而清晰的精神气质：有意外，有忍耐，有复习，有回归；有病房里的安静，也有教室里的重新亮相；有一时的缺席，也有最终漂亮的回应。这样的故事，不需要过多修饰，因为事实本身已经足够有力量。对于同学来说，他是一个看得见的榜样；对于老师来说，他是一个认真而可靠的学生；对于他自己来说，这段经历也许会成为未来很久都还会想起的一页。因为它提醒着他，真正能走远的人，往往不是从没停过的人，而是停过以后，依然能再次出发的人。</p>
+
+            <div class="inline-photo">
+                <img src="assets/img-3.jpg" alt="王子航收藏旧照再次出现">
+                <figcaption>图⑥ · 王子航在日常生活中的另一张旧照，显得安静而从容。</figcaption>
+            </div>
+
+            <p>如果把这一整段经历浓缩成一句话，那就是：王子航在最需要稳住自己的时候，稳住了；在最容易放弃的时候，坚持住了；在最值得被记住的时候，真正被记住了。病床不是终点，休学不是终点，第10名也不是终点。它们只是成长路上的几个坐标，而王子航已经用自己的方式，把这些坐标连成了一条向上的线。子船日报今天把这条线写进头版，不只是因为它足够动人，更因为它足够真实，足够完整，也足够像一则真正应该被认真报道的人物专刊。</p>
+        </article>
+        <div class="quote">真正的归来，不是回到原地，而是带着更坚定的自己重新出发。</div>
     </section>
 
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <div class="section-title">
-                <h2>About Green Network</h2>
-                <p>We are a global community dedicated to environmental protection and sustainable development.</p>
-            </div>
-            <div class="about-content">
-                <div class="about-img">
-                    <img src="https://images.unsplash.com/photo-1507591064344-4c6ce005b128?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Team planting trees">
-                </div>
-                <div class="about-text">
-                    <h3>Our Mission</h3>
-                    <p>Green Network is committed to creating a sustainable future by protecting natural ecosystems, promoting renewable energy, and empowering communities to take environmental action.</p>
-                    <p>Founded in 2010, we've grown from a small grassroots organization to an international network with over 50,000 members across 120 countries.</p>
-                    <p>Our approach combines scientific research, community engagement, and policy advocacy to address the most pressing environmental challenges of our time.</p>
-                    <a href="#" class="btn">Learn More</a>
-                </div>
-            </div>
-            <div class="stats">
-                <div class="stat-item">
-                    <i class="fas fa-tree"></i>
-                    <h3 class="counter" data-target="2500000">0</h3>
-                    <p>Trees Planted</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-users"></i>
-                    <h3 class="counter" data-target="50000">0</h3>
-                    <p>Active Members</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-globe-americas"></i>
-                    <h3 class="counter" data-target="120">0</h3>
-                    <p>Countries Reached</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-recycle"></i>
-                    <h3 class="counter" data-target="1500">0</h3>
-                    <p>Cleanup Projects</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Initiatives Section -->
-    <section class="initiatives" id="initiatives">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Initiatives</h2>
-                <p>Discover the key programs and projects we're implementing to protect our planet.</p>
-            </div>
-            <div class="initiatives-grid">
-                <div class="initiative-card">
-                    <div class="initiative-img">
-                        <img src="https://dialogue.earth/content/uploads/2021/04/lessons-from-the-rush-to-reforest-china-dialogue-2400x1599.jpg" alt="Reforestation">
-                    </div>
-                    <div class="initiative-content">
-                        <h3>Global Reforestation</h3>
-                        <p>Planting millions of trees worldwide to restore ecosystems, combat climate change, and protect biodiversity.</p>
-                        <a href="#" class="btn">Learn More</a>
-                    </div>
-                </div>
-                <div class="initiative-card">
-                    <div class="initiative-img">
-                        <img src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Ocean Conservation">
-                    </div>
-                    <div class="initiative-content">
-                        <h3>Ocean Conservation</h3>
-                        <p>Protecting marine ecosystems, reducing plastic pollution, and promoting sustainable fishing practices.</p>
-                        <a href="#" class="btn">Learn More</a>
-                    </div>
-                </div>
-                <div class="initiative-card">
-                    <div class="initiative-img">
-                        <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80" alt="Renewable Energy">
-                    </div>
-                    <div class="initiative-content">
-                        <h3>Renewable Energy</h3>
-                        <p>Promoting solar, wind, and other clean energy sources to reduce dependence on fossil fuels.</p>
-                        <a href="#" class="btn">Learn More</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta" id="get-involved">
-        <div class="container">
-            <h2>Join Our Global Movement</h2>
-            <p>Together, we can create a sustainable future for generations to come. Every action counts, no matter how small.</p>
-            <a href="#" class="btn">Become a Member</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Green Network</h3>
-                    <p>We are dedicated to protecting our planet through collaborative action, education, and sustainable solutions.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#initiatives">Initiatives</a></li>
-                        <li><a href="#get-involved">Get Involved</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Our Programs</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Reforestation</a></li>
-                        <li><a href="#">Ocean Cleanup</a></li>
-                        <li><a href="#">Wildlife Protection</a></li>
-                        <li><a href="#">Climate Education</a></li>
-                        <li><a href="#">Sustainable Agriculture</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Contact Us</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Copper Creek Drive, New York</p>
-                    <p><i class="fas fa-phone"></i> +1 (312) 171-0771</p>
-                    <p><i class="fas fa-envelope"></i> support@greennetwork.org</p>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 Green Network. All rights reserved.</p>
-            </div>
-        </div>
+    <footer class="footer">
+        <span>子船日报 · 特别人物专刊</span>
+        <span>发报人：KUN</span>
+        <span>发布日期：今天</span>
     </footer>
+</main>
 
-    <script>
-        // Mobile Menu Toggle
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            document.querySelector('nav ul').classList.toggle('active');
-        });
+<script>
+(function() {
+    const birth = new Date("2011-04-24T00:00:00");
+    function tick() {
+        const now = new Date();
+        let years = now.getFullYear() - birth.getFullYear();
+        let months = now.getMonth() - birth.getMonth();
+        let days = now.getDate() - birth.getDate();
+        let hours = now.getHours() - birth.getHours();
+        let minutes = now.getMinutes() - birth.getMinutes();
+        let seconds = now.getSeconds() - birth.getSeconds();
 
-        // Counter Animation
-        function animateCounters() {
-            const counters = document.querySelectorAll('.counter');
-            const speed = 200; // The lower the slower
-            
-            counters.forEach(counter => {
-                const target = +counter.getAttribute('data-target');
-                const count = +counter.innerText;
-                
-                const inc = target / speed;
-                
-                if(count < target) {
-                    counter.innerText = Math.ceil(count + inc);
-                    setTimeout(animateCounters, 1);
-                } else {
-                    counter.innerText = target;
-                }
-            });
+        if (seconds < 0) { seconds += 60; minutes -= 1; }
+        if (minutes < 0) { minutes += 60; hours -= 1; }
+        if (hours < 0) { hours += 24; days -= 1; }
+        if (days < 0) {
+            const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+            days += prevMonth.getDate();
+            months -= 1;
         }
+        if (months < 0) { months += 12; years -= 1; }
 
-        // Initialize counters when page loads
-        window.addEventListener('load', animateCounters);
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    document.querySelector('nav ul').classList.remove('active');
-                }
-            });
-        });
-    </script>
+        document.getElementById("age").textContent =
+            `小白脸已经：${years} years old · ${months} mo · ${days} day · ${hours} h · ${minutes} min · ${seconds} s`;
+    }
+    tick();
+    setInterval(tick, 1000);
+})();
+</script>
 </body>
-
 </html>
